@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssm.dao.BookMapper">
+  <resultMap id="BaseResultMap" type="com.ssm.model.Book">
+    <result column="book_name" jdbcType="VARCHAR" property="bookName" />
+    <result column="book_number" jdbcType="INTEGER" property="bookNumber" />
+  </resultMap>
+  <insert id="insert" parameterType="com.ssm.model.Book">
+    insert into books (book_name, book_number)
+    values (#{bookName,jdbcType=VARCHAR}, #{bookNumber,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.ssm.model.Book">
+    insert into books
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="bookName != null">
+        book_name,
+      </if>
+      <if test="bookNumber != null">
+        book_number,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="bookName != null">
+        #{bookName,jdbcType=VARCHAR},
+      </if>
+      <if test="bookNumber != null">
+        #{bookNumber,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <resultMap id="BaseResultMap" type="com.ssm.model.Book">
+    <result column="book_name" jdbcType="VARCHAR" property="bookName" />
+    <result column="book_number" jdbcType="INTEGER" property="bookNumber" />
+  </resultMap>
+  <insert id="insert" parameterType="com.ssm.model.Book">
+    insert into books (book_name, book_number)
+    values (#{bookName,jdbcType=VARCHAR}, #{bookNumber,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.ssm.model.Book">
+    insert into books
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="bookName != null">
+        book_name,
+      </if>
+      <if test="bookNumber != null">
+        book_number,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="bookName != null">
+        #{bookName,jdbcType=VARCHAR},
+      </if>
+      <if test="bookNumber != null">
+        #{bookNumber,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <resultMap id="BaseResultMap" type="com.ssm.model.Book">
+    <id column="book_id" jdbcType="BIGINT" property="bookId" />
+    <result column="book_name" jdbcType="VARCHAR" property="bookName" />
+    <result column="book_number" jdbcType="INTEGER" property="bookNumber" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    book_id, book_name, book_number
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from books
+    where book_id = #{bookId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from books
+    where book_id = #{bookId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.ssm.model.Book">
+    insert into books (book_id, book_name, book_number
+      )
+    values (#{bookId,jdbcType=BIGINT}, #{bookName,jdbcType=VARCHAR}, #{bookNumber,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.ssm.model.Book">
+    insert into books
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="bookId != null">
+        book_id,
+      </if>
+      <if test="bookName != null">
+        book_name,
+      </if>
+      <if test="bookNumber != null">
+        book_number,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="bookId != null">
+        #{bookId,jdbcType=BIGINT},
+      </if>
+      <if test="bookName != null">
+        #{bookName,jdbcType=VARCHAR},
+      </if>
+      <if test="bookNumber != null">
+        #{bookNumber,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ssm.model.Book">
+    update books
+    <set>
+      <if test="bookName != null">
+        book_name = #{bookName,jdbcType=VARCHAR},
+      </if>
+      <if test="bookNumber != null">
+        book_number = #{bookNumber,jdbcType=INTEGER},
+      </if>
+    </set>
+    where book_id = #{bookId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ssm.model.Book">
+    update books
+    set book_name = #{bookName,jdbcType=VARCHAR},
+      book_number = #{bookNumber,jdbcType=INTEGER}
+    where book_id = #{bookId,jdbcType=BIGINT}
+  </update>
+</mapper>

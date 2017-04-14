@@ -1,0 +1,2 @@
+
+java -jar D:\mybatis-generator-core-1.3.1\lib\mybatis-generator-core-1.3.1.jar -configfile D:\mybatis-generator-core-1.3.1\generator.xml -overwrite

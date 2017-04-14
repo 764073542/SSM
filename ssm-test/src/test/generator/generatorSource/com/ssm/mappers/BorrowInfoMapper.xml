@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ssm.dao.BorrowInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.ssm.model.BorrowInfo" >
+    <id column="book_name" property="bookName" jdbcType="VARCHAR" />
+    <id column="state" property="state" jdbcType="INTEGER" />
+    <id column="user_name" property="userName" jdbcType="VARCHAR" />
+    <result column="start_time" property="startTime" jdbcType="DATE" />
+    <result column="end_time" property="endTime" jdbcType="DATE" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    book_name, state, user_name, start_time, end_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="com.ssm.model.BorrowInfoKey" >
+    select 
+    <include refid="Base_Column_List" />
+    from user_book_borrow
+    where book_name = #{bookName,jdbcType=VARCHAR}
+      and state = #{state,jdbcType=INTEGER}
+      and user_name = #{userName,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="com.ssm.model.BorrowInfoKey" >
+    delete from user_book_borrow
+    where book_name = #{bookName,jdbcType=VARCHAR}
+      and state = #{state,jdbcType=INTEGER}
+      and user_name = #{userName,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.ssm.model.BorrowInfo" >
+    insert into user_book_borrow (book_name, state, user_name, 
+      start_time, end_time)
+    values (#{bookName,jdbcType=VARCHAR}, #{state,jdbcType=INTEGER}, #{userName,jdbcType=VARCHAR}, 
+      #{startTime,jdbcType=DATE}, #{endTime,jdbcType=DATE})
+  </insert>
+  <insert id="insertSelective" parameterType="com.ssm.model.BorrowInfo" >
+    insert into user_book_borrow
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="bookName != null" >
+        book_name,
+      </if>
+      <if test="state != null" >
+        state,
+      </if>
+      <if test="userName != null" >
+        user_name,
+      </if>
+      <if test="startTime != null" >
+        start_time,
+      </if>
+      <if test="endTime != null" >
+        end_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="bookName != null" >
+        #{bookName,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null" >
+        #{state,jdbcType=INTEGER},
+      </if>
+      <if test="userName != null" >
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime != null" >
+        #{startTime,jdbcType=DATE},
+      </if>
+      <if test="endTime != null" >
+        #{endTime,jdbcType=DATE},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ssm.model.BorrowInfo" >
+    update user_book_borrow
+    <set >
+      <if test="startTime != null" >
+        start_time = #{startTime,jdbcType=DATE},
+      </if>
+      <if test="endTime != null" >
+        end_time = #{endTime,jdbcType=DATE},
+      </if>
+    </set>
+    where book_name = #{bookName,jdbcType=VARCHAR}
+      and state = #{state,jdbcType=INTEGER}
+      and user_name = #{userName,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ssm.model.BorrowInfo" >
+    update user_book_borrow
+    set start_time = #{startTime,jdbcType=DATE},
+      end_time = #{endTime,jdbcType=DATE}
+    where book_name = #{bookName,jdbcType=VARCHAR}
+      and state = #{state,jdbcType=INTEGER}
+      and user_name = #{userName,jdbcType=VARCHAR}
+  </update>
+</mapper>

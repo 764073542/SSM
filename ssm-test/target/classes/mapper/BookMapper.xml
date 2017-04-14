@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssm.dao.BookMapper">
+    <!--Book返回类型
+    <resultMap id="BaseResultMap" type="com.ssm.model.Book">
+      <result column="book_name" jdbcType="VARCHAR" property="bookName" />
+      <result column="book_number" jdbcType="INTEGER" property="bookNumber" />
+    </resultMap>-->
+
+    <sql id="column_all">
+        book_id,book_name,book_number
+    </sql>
+    <sql id="column_book">
+        book_name,book_number
+    </sql>
+
+    <!-- 获取所有图书-->
+    <select id="queryAll" resultType="Book">
+        select
+        <include refid="column_book"/>
+        from books
+    </select>
+    <!-- 获取所有图书并按照馆存数量进行排序-->
+    <select id="queryAllOrder" parameterType="java.lang.String" resultType="Book">
+        select
+        <include refid="column_book"/>
+        from books
+        <!--这里传过来参数都要用_parameter表示才有效-->
+        <if test="_parameter=='DESC'">
+            order by book_number desc
+        </if>
+        <if test="_parameter=='ASC'">
+            order by book_number asc
+        </if>
+    </select>
+    <!--通过like进行模糊查询 '%_parameter%'-->
+    <select id="queryByName" parameterType="String" resultType="Book">
+        <bind name="pattern" value="'%' + _parameter + '%'"/>
+        select
+        <include refid="column_book"/>
+        from books
+        where book_name like #{pattern}
+    </select>
+    <!--统计数据库条数-->
+    <select id="countBooks" resultType="Integer">
+        select count(1) from books
+    </select>
+    <!--统计馆存总量-->
+    <select id="countOfBookNumber" resultType="Integer">
+        select sum(book_number) from books
+    </select>
+    <!--有限制条件的分页查询-->
+    <select id="queryOfLimit" resultType="Book">
+        select
+        <include refid="column_book"/>
+        from books
+        limit #{offset},#{limit}
+    </select>
+    <!--插入图书，其中自增id不管，忽略主键或UNIQUE冲突，返回影响行数-->
+    <insert id="insertBook" parameterType="Book">
+        insert ignore into books
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <include refid="column_book"/>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="bookName != null">
+                #{bookName,jdbcType=VARCHAR},
+            </if>
+            <if test="bookNumber > 0">
+                #{bookNumber,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <!--更新书籍信息 添加ignore冲突会返回1-->
+    <update id="updateBookInfo">
+        update ignore books set book_name=#{oldBookName} where
+        book_name=#{newBookName}
+    </update>
+    <!--更新书籍馆存信息 只支持+1、-1操作 事物ACID-->
+    <update id="subBookNumber" parameterType="String">
+        update books set book_number = book_number-1 where
+        book_name = #{bookName} and book_number >0
+    </update>
+    <update id="addBookNumber" parameterType="String">
+        update books set book_number = book_number+1 where
+        book_name = #{bookName}
+    </update>
+    <delete id="deleteBook" parameterType="String">
+        delete from books where book_name = #{bookName}
+    </delete>
+</mapper>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ssm.dao.UserMapper">
+    <sql id="column_user">
+        user_name, user_password
+    </sql>
+    <select id="queryAllUser" resultType="User">
+        select
+        <include refid="column_user"/>
+        from user
+    </select>
+    <select id="queryByUserName" parameterType="String" resultType="User">
+        select
+        <include refid="column_user"/>
+        from user where user_name=#{userName}
+    </select>
+    <select id="userLogin" parameterType="User" resultType="Integer">
+        select count(1)
+        from user where user_name=#{userName} and user_password=#{userPassword}
+    </select>
+    <select id="checkUserName" parameterType="String" resultType="Integer">
+        select count(1)
+        from user where user_name=#{userName}
+    </select>
+
+    <insert id="insertUser" parameterType="User">
+        insert ignore into user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <include refid="column_user"/>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userName != null">
+                #{userName,jdbcType=VARCHAR},
+            </if>
+            <if test="userPassword != null">
+                #{userPassword,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <!--修改密码-->
+    <update id="changeUserPassword">
+        update user
+        <set>
+            <if test="param3 != null">
+                user_password = #{param3}
+            </if>
+        </set>
+        where user_name = #{param1} and user_password=#{param2}
+    </update>
+    <!--删除用户，需要先删除user_book_borrow表中的记录，不然引发外键约束异常-->
+    <delete id="deleteUserByUserName" parameterType="String">
+        delete from user where
+        user_name = #{userName}
+    </delete>
+</mapper>
